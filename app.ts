@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import router from './router/url.router';
 const app = express();
 
 // Middlewares
@@ -9,7 +10,7 @@ app.use(express.json())
 
 
 // Routes 
-
+app.use('/api/', router)
 
 // Testing route
 app.get('/', (req: Request, res: Response) => {
@@ -29,5 +30,6 @@ app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
         message: "Internal problem"
     })
 })
+
 
 export default app;
