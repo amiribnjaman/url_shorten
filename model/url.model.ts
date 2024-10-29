@@ -1,15 +1,29 @@
-import { db } from '../database';
+import { db } from '../config/database';
 
-interface url{
+
+// URL INTERFACE
+interface Url{
     id?: number;
-    orgUrl: string;
-    srtUrl: string;
+    originalUrl: string;
+    shortUrl: string;
+    stastCount?: number;
 }
 
-const createTable = (): void => {
-    db.run(`CREATE TABLE IF NOT EXISTS urls (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        originalUrl TEXT NOT NULL,
-        shortUrl TEXT NOT NULL UNIQUE
-    )`)
+
+// CREATE A URL FUNCTION
+const addUrl = (url: Url): Promise<void> => {
+    return new Promise((resolve, reject) => {
+        const sql = `INSERT INTO urls (originalUrl, shortUrl, stastCount) VALUES (?, ?, ?)`;
+        db.run(sql, [url.originalUrl, url.shortUrl], (err) => {
+            if (err) {
+                reject(err);
+
+            } else {
+                resolve();
+            }
+        });
+
+    });
 }
+
+export {addUrl}

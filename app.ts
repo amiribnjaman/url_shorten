@@ -1,35 +1,52 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import router from './router/url.router';
+import { closeDb, createTable } from './config/database';
 const app = express();
 
-// Middlewares
+// MIDDLEWARES
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
+app.use(express.json());
 
 
-// Routes 
-app.use('/api/', router)
+(() =>  async (): Promise<void> =>{
+     {
+    try {
+        await createTable();
+        console.log('URLs table created successfully!');
+    } catch {
+        console.error('Something went wrong');
+    }
+};
+})();
 
-// Testing route
+// URL ROUTES 
+app.use('/app/url', router)
+
+// TESTING ROUTE
 app.get('/', (req: Request, res: Response) => {
     res.status(200).send('hello ')
 })
 
-// Handling url error
+// HADLING URL ERROR
 app.use((req: Request, res: Response, next: NextFunction)=> {
     res.status(404).json({
         message: 'Bad request'
     })
 })
 
-// Handling server error
-app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
+
+// HADLING SERVER ERROR
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     res.status(500).json({
         message: "Internal problem"
     })
 })
 
+process.on('SIGINT', () => {
+    closeDb();
+    process.exit();
+});
 
 export default app;
