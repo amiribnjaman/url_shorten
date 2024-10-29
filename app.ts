@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import router from './router/url.router';
-import { closeDb, createTable } from './config/database';
 const app = express();
 
 // MIDDLEWARES
@@ -10,16 +9,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
 
-(() =>  async (): Promise<void> =>{
-     {
-    try {
-        await createTable();
-        console.log('URLs table created successfully!');
-    } catch {
-        console.error('Something went wrong');
-    }
-};
-})();
 
 // URL ROUTES 
 app.use('/app/url', router)
@@ -44,9 +33,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     })
 })
 
-process.on('SIGINT', () => {
-    closeDb();
-    process.exit();
-});
 
 export default app;
