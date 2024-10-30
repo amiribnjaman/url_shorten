@@ -11,7 +11,7 @@ app.use(express.json());
 
 
 // URL ROUTES 
-app.use('/app/url', router)
+app.use('/api/url', router)
 
 // TESTING ROUTE
 app.get('/', (req: Request, res: Response) => {

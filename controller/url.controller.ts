@@ -3,10 +3,23 @@ import { addUrl, findUrl } from '../model/url.model';
 
 
 // CREATE SHORT URL CONTROLLER
-const createShortUrl = async (req: Request, res: Response): Promise<any> =>  {
+const createShortUrl = async (req: Request, res: Response): Promise<any> => {
+    // RANDOM UNIQUE SHORT TEXT GENERATOR FUNCTION
+    const generateUniqueShortText = async (length: number = 8): Promise<string> => {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+
+        for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters[randomIndex];
+        }
+
+        return result;
+    }
+
     const {originalUrl}  = req.body;
-    const shortUrl = 'gggmlleedwe'; 
-    const statsCount = 0;
+    const shortUrl = await generateUniqueShortText(); 
+    const statsCount = 1;
     console.log(originalUrl)
 
 
@@ -23,10 +36,11 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> =>  {
     }
 
     try {
-        const r = await addUrl({ originalUrl, shortUrl, statsCount });
-        console.log(r)
-        res.status(201).json({ originalUrl, shortUrl });
-
+        const result = await addUrl({ originalUrl, shortUrl, statsCount });
+        console.log('r')
+        if (result) {
+            res.status(201).json({ result });
+        }
     } catch (err) {
         console.error('Database error:', err);
         res.status(500).json({ message: ' Error adding URL', err });
