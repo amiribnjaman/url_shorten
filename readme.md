@@ -9,6 +9,9 @@ A simple URL shortener application built with Express, TypeScript, and SQLite. T
 - Track the number of times a shortened URL has been accessed
 - Set expiration for shortened URLs
 - Handle invalid and expired URLs
+- Allow users to set their own short URLs
+- Rate limit for user to prevent abuse
+
 
 ## Technologies Used
 
@@ -27,13 +30,13 @@ A simple URL shortener application built with Express, TypeScript, and SQLite. T
 
 ### Installation
 
-1. Clone the repository:
+Clone the repository:
 
-   ```bash
-   git clone https://github.com/amiribnjaman/url-shortener.git
+```bash
+git clone https://github.com/amiribnjaman/url-shortener.git
 
-   cd url-shortener
-   ```
+cd url-shortener
+```
 
 ## Install the dependencies:
 

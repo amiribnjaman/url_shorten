@@ -1,13 +1,29 @@
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import router from './router/url.router';
+import rateLimit from 'express-rate-limit';
 const app = express();
+
+/*
+**
+** DEFIE RATE LIMIT PACKAGE
+**
+*/
+const limiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 20,
+    message: {
+        message: 'Too many requests, please try again later.'
+    }
+})
+
 
 // MIDDLEWARES
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-
+// APPLY THE  RATE LIMIT
+app.use(limiter);
 
 
 // URL ROUTES 
