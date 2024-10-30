@@ -22,7 +22,6 @@ const limiter = rateLimit({
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
-// APPLY THE  RATE LIMIT
 app.use(limiter);
 
 
