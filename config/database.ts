@@ -12,7 +12,8 @@ export const setupDb = async () => {
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     originalUrl TEXT NOT NULL,
     shortUrl TEXT UNIQUE NOT NULL,
-    statsCount INTEGER DEFAULT 0
+    statsCount INTEGER DEFAULT 0,
+    expirationDate DATETIME
     )`);
       console.log('database connected')
     } catch (err) {

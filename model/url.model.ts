@@ -7,6 +7,7 @@ interface Url{
     originalUrl: string;
     shortUrl: string;
     statsCount?: number; 
+    expirationDate?: string;
 }
 
 //DATABASE CONNECTION
@@ -18,15 +19,18 @@ const dbCon = open({
 // URL ADDING MODEL
 const addUrl = async (url: Url) => {
   const { originalUrl, shortUrl, statsCount = 0 } = url;
+  //URL WILL BE EXPIRED AFTER 2 MUNITES
+  const expirationDate = new Date(Date.now() + 2 * 60 * 1000).toISOString();
 
   const db = await dbCon;
+  // CHEKING IF THIS URL ALREADY EXIST OR NOT
   const urlIfExit: Url | undefined = await db.get('SELECT * FROM urls WHERE originalUrl = ?', originalUrl);
   console.log('url',urlIfExit);
   
   let res;
   if (!urlIfExit) {
     console.log('iside');
-    db.run('INSERT INTO urls (originalUrl, shortUrl, statsCount) VALUES (?, ?, ?)', [originalUrl, shortUrl, statsCount]);
+    db.run('INSERT INTO urls (originalUrl, shortUrl, statsCount, expirationDate) VALUES (?, ?, ?, ?)', [originalUrl, shortUrl, statsCount, expirationDate]);
     return res = {
       msg: 'url created successfully',
       originalUrl,
@@ -44,12 +48,21 @@ const findUrl = async (shortUrl: string) => {
   const db = await dbCon;
   const url: Url | undefined = await db.get('SELECT * FROM urls WHERE shortUrl = ?', shortUrl);
     
-    if (!url) {
-        console.log(`No URL found for shortUrl: ${shortUrl}`);
-        return null; // or handle it as you prefer
-    }
+  if (!url) {
+      console.log(`No URL found for: ${shortUrl}`);
+      return null;
+  }
+  
+  const currentDate = new Date();
+  const expireDate = new Date(url?.expirationDate!);
 
-    // Ensure statsCount is defined before incrementing
+  // CHECK IF URL HAS EXPIRED
+  if (currentDate > expireDate) {
+      console.log(`URL has expired: ${shortUrl}`);
+      return null;
+  }
+
+  // INCREMENTING STATS VALUE
   const newStatsCount = (url.statsCount || 0) + 1;
   console.log(newStatsCount);
   

@@ -4,6 +4,9 @@ import { addUrl, findUrl, urlStats } from '../model/url.model';
 
 // CREATE SHORT URL CONTROLLER
 const createShortUrl = async (req: Request, res: Response): Promise<any> => {
+    const { originalUrl } = req.body;
+
+
     // RANDOM UNIQUE SHORT TEXT GENERATOR FUNCTION
     const generateUniqueShortText = async (length: number = 8): Promise<string> => {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -17,17 +20,14 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> => {
         return result;
     }
 
-    const {originalUrl}  = req.body;
-    const shortUrl = await generateUniqueShortText(); 
-    const statsCount = 0;
-    console.log(originalUrl)
+    const shortUrl = await generateUniqueShortText();
 
 
     // CHECKING THE URL
     if (!originalUrl) {
         return res.status(400).json({ message: 'please provide a valid url'});
     }
-    
+
     // VALIDATION FOR URL
     try {
         new URL(originalUrl);
@@ -35,6 +35,8 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> => {
         return res.status(400).json({ message: 'please provide a valid url',  error});
     }
 
+
+    // TRY TO OPERATE MAIN WORK AND SEND RESPONSE
     try {
         const result = await addUrl({ originalUrl, shortUrl });
         console.log('r')
@@ -57,14 +59,15 @@ const redirectToMainUrl = async (req: Request, res: Response) => {
         console.log('redirectd to', urlData.originalUrl)
         return res.redirect(urlData.originalUrl);
   }
-  res.status(404).json({ error: 'URL not found' });
+  res.status(404).json({ error: 'URL not found or has expired' });
 };
 
 // SHORT URL STAST CONTROLLER
 const shortUrlStats = async (req: Request, res: Response) => {
     const { shortUrl } = req.params;
     const result = await urlStats(shortUrl);
-    console.log(`page visit ${result?.statsCount} times`);
+    console.log(`This page has accessed ${result?.statsCount} times`);
+    res.status(200).json({ stast: `This page has accessed ${result?.statsCount} times` });
     
 }
 
