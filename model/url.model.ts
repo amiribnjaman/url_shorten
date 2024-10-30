@@ -1,7 +1,12 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
-// URL INTERFACE
+
+/*
+**
+** URL INTERFACE
+**
+*/ 
 interface Url{
     id?: number;
     originalUrl: string;
@@ -10,13 +15,21 @@ interface Url{
     expirationDate?: string;
 }
 
-//DATABASE CONNECTION
+/*
+**
+** DATABASE CONNECTION
+**
+*/
 const dbCon = open({
   filename: './database.sqlite',
   driver: sqlite3.Database
 });
 
-// URL ADDING MODEL
+/*
+**
+** URL ADDING AND SHORT URL OPERATE MODEL
+**
+*/
 const addUrl = async (url: Url) => {
   const { originalUrl, shortUrl, statsCount = 0 } = url;
   let res;
@@ -53,7 +66,12 @@ const addUrl = async (url: Url) => {
   };
 };
 
-// URL FINDING MODEL
+
+/*
+**
+** URL FINDING MODEL
+**
+*/
 const findUrl = async (shortUrl: string) => {
   const db = await dbCon;
   const url: Url | undefined = await db.get('SELECT * FROM urls WHERE shortUrl = ?', shortUrl);
@@ -82,7 +100,11 @@ const findUrl = async (shortUrl: string) => {
     return url;
 };
 
-// SHORT URL STAST MODEL
+/*
+**
+** SHORT URL STAST MODEL URL FINDING MODEL
+**
+*/
 const urlStats = async (shortUrl: string) => {
   const db = await dbCon;
   const result: Url | undefined = await db.get('SELECT * FROM urls WHERE shortUrl = ?', shortUrl);

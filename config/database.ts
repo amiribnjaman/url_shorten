@@ -1,6 +1,13 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
+
+/*
+**
+** SETUP DATABASE FUNCTION
+** EXECUTE TABLE CREATION
+**
+*/ 
 export const setupDb = async () => {
   const db = await open({
     filename: './database.sqlite',
