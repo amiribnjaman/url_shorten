@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { addUrl, findUrl } from '../model/url.model';
+import { addUrl, findUrl, urlStats } from '../model/url.model';
 
 
 // CREATE SHORT URL CONTROLLER
@@ -19,7 +19,7 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> => {
 
     const {originalUrl}  = req.body;
     const shortUrl = await generateUniqueShortText(); 
-    const statsCount = 1;
+    const statsCount = 0;
     console.log(originalUrl)
 
 
@@ -36,7 +36,7 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> => {
     }
 
     try {
-        const result = await addUrl({ originalUrl, shortUrl, statsCount });
+        const result = await addUrl({ originalUrl, shortUrl });
         console.log('r')
         if (result) {
             res.status(201).json({ result });
@@ -51,16 +51,21 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> => {
 // REDIRET TO THE MAIN URL CONTROLLER
 const redirectToMainUrl = async (req: Request, res: Response) => {
   const { shortUrl } = req.params;
-    const urlData = await findUrl(shortUrl);
+        const urlData = await findUrl(shortUrl);
 
-    if (urlData) {
-      console.log('redirectd to', urlData.originalUrl)
-    return res.redirect(urlData.originalUrl);
+        if (urlData) {
+        console.log('redirectd to', urlData.originalUrl)
+        return res.redirect(urlData.originalUrl);
   }
   res.status(404).json({ error: 'URL not found' });
 };
 
+// SHORT URL STAST CONTROLLER
+const shortUrlStats = async (req: Request, res: Response) => {
+    const { shortUrl } = req.params;
+    const result = await urlStats(shortUrl);
+    console.log(`page visit ${result?.statsCount} times`);
+    
+}
 
-
-
-export {createShortUrl, redirectToMainUrl}
+export {createShortUrl, redirectToMainUrl, shortUrlStats}

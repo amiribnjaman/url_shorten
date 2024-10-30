@@ -50,18 +50,22 @@ const findUrl = async (shortUrl: string) => {
     }
 
     // Ensure statsCount is defined before incrementing
-    const newStatsCount = (url.statsCount || 0)+1;
-    await db.run('UPDATE urls SET statsCount = ? WHERE shortUrl = ?', [newStatsCount, shortUrl]);
+  const newStatsCount = (url.statsCount || 0) + 1;
+  console.log(newStatsCount);
+  
+    const result = await db.run('UPDATE urls SET statsCount = ? WHERE shortUrl = ?', [newStatsCount, shortUrl]);
 
-    console.log(url);
+    console.log(result);
     return url;
-  // const url  = await db.get('SELECT * FROM urls WHERE shortUrl = ?', shortUrl);
-  // // UPDATE STATS COUNT WHEN SHORT LINK VISIT
-  //  const newStatsCount = (url.statsCount | 0) +1
-  // await db.run('UPDATE urls  SET statsCount = ? WHERE shortUrl = ?', [newStatsCount, shortUrl])
-
-  // console.log(url)
-  // return url;
 };
 
-export {addUrl, findUrl}
+// SHORT URL STAST MODEL
+const urlStats = async (shortUrl: string) => {
+  const db = await dbCon;
+  const result: Url | undefined = await db.get('SELECT * FROM urls WHERE shortUrl = ?', shortUrl);
+  console.log(result);
+  return result;
+  
+}
+
+export {addUrl, findUrl, urlStats}
