@@ -4,8 +4,9 @@ import { addUrl, findUrl, urlStats } from '../model/url.model';
 
 // CREATE SHORT URL CONTROLLER
 const createShortUrl = async (req: Request, res: Response): Promise<any> => {
-    const { originalUrl } = req.body;
-
+    const { originalUrl, customAlias } = req.body;
+    console.log(customAlias);
+    
 
     // RANDOM UNIQUE SHORT TEXT GENERATOR FUNCTION
     const generateUniqueShortText = async (length: number = 8): Promise<string> => {
@@ -20,7 +21,7 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> => {
         return result;
     }
 
-    const shortUrl = await generateUniqueShortText();
+    const shortUrl = customAlias || await generateUniqueShortText();
 
 
     // CHECKING THE URL

@@ -19,15 +19,25 @@ const dbCon = open({
 // URL ADDING MODEL
 const addUrl = async (url: Url) => {
   const { originalUrl, shortUrl, statsCount = 0 } = url;
+  let res;
   //URL WILL BE EXPIRED AFTER 2 MUNITES
   const expirationDate = new Date(Date.now() + 2 * 60 * 1000).toISOString();
+  console.log(shortUrl);
+  // return
 
   const db = await dbCon;
+  const checkUrl: Url | undefined = await db.get('SELECT * FROM urls WHERE shortUrl = ?', shortUrl);
+  if (checkUrl?.shortUrl == shortUrl) {
+    return res = {
+    status: 400,
+    msg: 'Your custom url is already in use. please choose an unique one'
+  };
+  }
   // CHEKING IF THIS URL ALREADY EXIST OR NOT
   const urlIfExit: Url | undefined = await db.get('SELECT * FROM urls WHERE originalUrl = ?', originalUrl);
   console.log('url',urlIfExit);
   
-  let res;
+
   if (!urlIfExit) {
     console.log('iside');
     db.run('INSERT INTO urls (originalUrl, shortUrl, statsCount, expirationDate) VALUES (?, ?, ?, ?)', [originalUrl, shortUrl, statsCount, expirationDate]);

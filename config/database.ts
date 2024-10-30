@@ -8,13 +8,14 @@ export const setupDb = async () => {
   });
     try {
       await db.exec(`
-    CREATE TABLE IF NOT EXISTS urls (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    originalUrl TEXT NOT NULL,
-    shortUrl TEXT UNIQUE NOT NULL,
-    statsCount INTEGER DEFAULT 0,
-    expirationDate DATETIME
-    )`);
+        CREATE TABLE IF NOT EXISTS urls (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        originalUrl TEXT NOT NULL,
+        shortUrl TEXT UNIQUE NOT NULL,
+        statsCount INTEGER DEFAULT 0,
+        expirationDate DATETIME
+        )`
+      );
       console.log('database connected')
     } catch (err) {
         console.log('somethig went wrong')
