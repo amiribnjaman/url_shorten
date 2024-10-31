@@ -2,6 +2,12 @@
 
 A simple URL shortener application built with Express, TypeScript, and SQLite. This application allows users to create shortened URLs, access the original URLs, track usage statistics, and handle URL expiration.
 
+## Design Patterns
+
+This application follows the **Model-View-Controller (MVC)** and **Repository** design patterns
+
+## Getting Started
+
 ## Features
 
 - Shorten long URLs
