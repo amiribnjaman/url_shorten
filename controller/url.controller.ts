@@ -94,7 +94,7 @@ const shortUrlStats = async (req: Request, res: Response) => {
     const { shortUrl } = req.params;
     const result = await urlStats(shortUrl);
     console.log(`This page has accessed ${result?.statsCount} times`);
-    res.status(200).json({ stast: `This page has accessed ${result?.statsCount} times` });
+    res.status(200).json({ stats: `This page has accessed ${result?.statsCount} times`, result  });
     
 }
 
