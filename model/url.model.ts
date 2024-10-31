@@ -33,8 +33,8 @@ const dbCon = open({
 const addUrl = async (url: Url) => {
   const { originalUrl, shortUrl, statsCount = 0 } = url;
   let res;
-  //URL WILL BE EXPIRED AFTER 2 MUNITES
-  const expirationDate = new Date(Date.now() + 2 * 60 * 1000).toISOString();
+  //URL WILL BE EXPIRED AFTER 5 MUNITES
+  const expirationDate = new Date(Date.now() + 5 * 60 * 1000).toISOString();
   console.log(shortUrl);
   // return
 
@@ -50,7 +50,6 @@ const addUrl = async (url: Url) => {
   const urlIfExit: Url | undefined = await db.get('SELECT * FROM urls WHERE originalUrl = ?', originalUrl);
   console.log('url',urlIfExit);
   
-
   if (!urlIfExit) {
     console.log('iside');
     db.run('INSERT INTO urls (originalUrl, shortUrl, statsCount, expirationDate) VALUES (?, ?, ?, ?)', [originalUrl, shortUrl, statsCount, expirationDate]);

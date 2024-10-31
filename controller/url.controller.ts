@@ -27,17 +27,10 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> => {
     const shortUrl = customAlias || await generateUniqueShortText();
 
 
-    // CHECKING THE URL
+    // CHECKING THE URL IF IT HAS OR NOT
     if (!originalUrl) {
         return res.status(400).json({ message: 'please provide a valid url'});
     }
-
-    // VALIDATION FOR URL
-    // try {
-    //     new URL(originalUrl);
-    // } catch (error) {
-    //     return res.status(400).json({ message: 'please provide a valid url',  error});
-    // }
 
 
     /*
@@ -46,7 +39,7 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> => {
     const urlPattern = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+)(:[0-9]{1,5})?(\/.*)?$/;
 
     const checkUrl = urlPattern.test(originalUrl);
-    console.log(checkUrl); 
+    // console.log(checkUrl); 
     
 
     if (checkUrl) {
