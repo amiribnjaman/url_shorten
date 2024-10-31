@@ -61,7 +61,7 @@ npm run start
 ### API Endpoints
 ## Create Short URL
 
-- Endpoint: POST /api/shorten
+- Endpoint: POST /url/shorten
 - Request Body:
 {
   "originalUrl": "http://hello.com",
@@ -81,7 +81,7 @@ npm run start
 - Response: Redirects to the original URL or returns a 404 if not found or expired.
 
 ## Get URL Stats
-- Endpoint: GET /api/stats/:shortUrl
+- Endpoint: GET /url/stats/:shortUrl
 - Response:
 {
   "originalUrl": "http://hello.com",
