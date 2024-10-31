@@ -11,7 +11,7 @@ const app = express();
 */
 const limiter = rateLimit({
     windowMs: 60 * 1000,
-    max: 20,  // set 20 request per minutes as testing purpose
+    max: 100,  // set 100 request per minutes as testing purpose
     message: {
         message: 'Too many requests, please try again later.'
     }
