@@ -1,7 +1,7 @@
 {
   "name": "url shorter",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple URL shortener application. This application allows users to create shortened URLs, access the original URLs, track usage statistics, and handle URL expiration.",
   "main": "index.ts",
   "scripts": {
     "start": "ts-node index.ts",

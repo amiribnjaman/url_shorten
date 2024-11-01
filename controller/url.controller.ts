@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { addUrl, findUrl, urlStats } from '../model/url.model';
+import {generateUniqueShortText} from '../utils/generateUniqueShortText'
+import { urlValidateRegex } from "../utils/urlValidateRegex";
 
 /*
 **
@@ -9,21 +11,7 @@ import { addUrl, findUrl, urlStats } from '../model/url.model';
 const createShortUrl = async (req: Request, res: Response): Promise<any> => {
     const { originalUrl, customAlias } = req.body;
     console.log(customAlias);
-    
-
-    // RANDOM UNIQUE SHORT TEXT GENERATOR FUNCTION
-    const generateUniqueShortText = async (length: number = 8): Promise<string> => {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-
-        for (let i = 0; i < length; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            result += characters[randomIndex];
-        }
-
-        return result;
-    }
-
+    const checkUrl = urlValidateRegex(originalUrl)
     const shortUrl = customAlias || await generateUniqueShortText();
 
 
@@ -31,16 +19,6 @@ const createShortUrl = async (req: Request, res: Response): Promise<any> => {
     if (!originalUrl) {
         return res.status(400).json({ message: 'please provide a valid url'});
     }
-
-
-    /*
-    ** CHECK URL VALIDATION USING REGEX
-    */ 
-    const urlPattern = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+)(:[0-9]{1,5})?(\/.*)?$/;
-
-    const checkUrl = urlPattern.test(originalUrl);
-    // console.log(checkUrl); 
-    
 
     if (checkUrl) {
         // TRY TO OPERATE MAIN WORK AND SEND RESPONSE
